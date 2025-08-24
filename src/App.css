@@ -1,0 +1,94 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+/* ...existing code... */
+
+.container {
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.assignment-form {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+.assignment-form input {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.assignment-form button {
+  padding: 0.5rem 1rem;
+  border: none;
+  background: #646cff;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.assignment-form button[type="button"] {
+  background: #ccc;
+  color: #333;
+}
+.assignment-list {
+  list-style: none;
+  padding: 0;
+}
+.assignment-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #eee;
+}
+.assignment-item button {
+  margin-left: 0.5rem;
+  padding: 0.3rem 0.7rem;
+  border: none;
+  border-radius: 4px;
+  background: #e63946;
+  color: #fff;
+  cursor: pointer;
+}
+.assignment-item button:first-of-type {
+  background: #457b9d;
+}
+  color: #888;
+}
