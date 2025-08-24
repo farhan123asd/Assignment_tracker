@@ -1,0 +1,33 @@
+{
+  "name": "assignment-management-app",
+  "version": "1.0.0",
+  "description": "A web application for managing assignments with features for creating, viewing, editing, deleting, and marking assignments as complete.",
+  "main": "src/index.tsx",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "dependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-router-dom": "^5.3.0",
+    "typescript": "^4.4.4"
+  },
+  "devDependencies": {
+    "@types/react": "^17.0.2",
+    "@types/react-dom": "^17.0.2",
+    "@types/react-router-dom": "^5.1.7",
+    "eslint": "^7.32.0",
+    "eslint-plugin-react": "^7.27.1"
+  },
+  "keywords": [
+    "assignment",
+    "management",
+    "application",
+    "react"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}

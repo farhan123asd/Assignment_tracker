@@ -1,5 +1,10 @@
 
+
 import { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Link, useParams, Navigate } from 'react-router-dom';
+import AllAssignments from './pages/AllAssignments';
+import Calendar from './pages/Calendar';
+import Course from './pages/Course';
 import './App.css';
 
 
@@ -111,90 +116,116 @@ function App() {
   const courseList = [...new Set(assignments.map(a => a.course))];
 
   return (
-    <div className="container">
-      <h1>Assignment Management</h1>
-      {notification && <div className="notification">{notification}</div>}
-      <form onSubmit={editIndex === null ? handleAdd : handleUpdate} className="assignment-form">
-        <input
-          type="text"
-          name="title"
-          placeholder="Assignment Title"
-          value={form.title}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
-          name="course"
-          placeholder="Course/Subject"
-          value={form.course}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="datetime-local"
-          name="dueDateTime"
-          value={form.dueDateTime}
-          onChange={handleChange}
-          required
-        />
-        <select name="priority" value={form.priority} onChange={handleChange} required>
-          {priorityLevels.map(level => (
-            <option key={level} value={level}>{level}</option>
-          ))}
-        </select>
-        <button type="submit">{editIndex === null ? 'Add Assignment' : 'Update Assignment'}</button>
-        {editIndex !== null && (
-          <button type="button" onClick={() => { setEditIndex(null); setForm({ title: '', course: '', dueDateTime: '', priority: 'Medium' }); }}>Cancel</button>
-        )}
-      </form>
-
-      <div className="filter-sort">
-        <select value={filter.course} onChange={e => setFilter(f => ({ ...f, course: e.target.value }))}>
-          <option value="">All Courses</option>
-          {courseList.map(course => (
-            <option key={course} value={course}>{course}</option>
-          ))}
-        </select>
-        <label>
-          <input type="checkbox" checked={filter.dueThisWeek} onChange={e => setFilter(f => ({ ...f, dueThisWeek: e.target.checked }))} />
-          Due This Week
-        </label>
-        <label>
-          <input type="checkbox" checked={filter.incompleteOnly} onChange={e => setFilter(f => ({ ...f, incompleteOnly: e.target.checked }))} />
-          Incomplete Only
-        </label>
-        <select value={sortBy} onChange={e => setSortBy(e.target.value)}>
-          <option value="dueDateTime">Sort by Due Date</option>
-          <option value="priority">Sort by Priority</option>
-          <option value="course">Sort by Course</option>
-        </select>
+    <Router>
+      <div className="app-container">
+        {/* Header */}
+        <header className="site-header">
+          <h1>Assignment Tracker</h1>
+        </header>
+        <main className="container" role="main">
+          <>
+            <nav className="main-nav" aria-label="Main navigation">
+              <Link to="/assignments" aria-label="All Assignments">All Assignments</Link>
+              <Link to="/calendar" className="calendar-nav-btn" aria-label="Calendar">Calendar</Link>
+              {courseList.map(course => (
+                <Link key={course} to={`/course/${course}`} aria-label={`Assignments for ${course}`}>{course}</Link>
+              ))}
+            </nav>
+            {notification && <div className="notification" role="alert">{notification}</div>}
+            <Routes>
+              <>
+                <Route path="/" element={<Navigate to="/assignments" />} />
+                <Route path="/assignments" element={
+                  <section aria-labelledby="assignments-heading">
+                    <h1 id="assignments-heading" style={{fontSize:'2rem'}}>Assignments</h1>
+                    <form onSubmit={editIndex === null ? handleAdd : handleUpdate} className="assignment-form" aria-label="Assignment Form">
+                      <label htmlFor="title">Title</label>
+                      <input
+                        id="title"
+                        type="text"
+                        name="title"
+                        placeholder="Assignment Title"
+                        value={form.title}
+                        onChange={handleChange}
+                        required
+                      />
+                      <label htmlFor="course">Course/Subject</label>
+                      <input
+                        id="course"
+                        type="text"
+                        name="course"
+                        placeholder="Course/Subject"
+                        value={form.course}
+                        onChange={handleChange}
+                        required
+                      />
+                      <label htmlFor="dueDateTime">Due Date & Time</label>
+                      <input
+                        id="dueDateTime"
+                        type="datetime-local"
+                        name="dueDateTime"
+                        value={form.dueDateTime}
+                        onChange={handleChange}
+                        required
+                      />
+                      <label htmlFor="priority">Priority</label>
+                      <select id="priority" name="priority" value={form.priority} onChange={handleChange} required>
+                        {priorityLevels.map(level => (
+                          <option key={level} value={level}>{level}</option>
+                        ))}
+                      </select>
+                      <button type="submit">{editIndex === null ? 'Add Assignment' : 'Update Assignment'}</button>
+                      {editIndex !== null && (
+                        <button type="button" onClick={() => { setEditIndex(null); setForm({ title: '', course: '', dueDateTime: '', priority: 'Medium' }); }}>Cancel</button>
+                      )}
+                    </form>
+                    <div className="filter-sort" aria-label="Filter and Sort">
+                      <label htmlFor="filter-course">Course</label>
+                      <select id="filter-course" value={filter.course} onChange={e => setFilter(f => ({ ...f, course: e.target.value }))}>
+                        <option value="">All Courses</option>
+                        {courseList.map(course => (
+                          <option key={course} value={course}>{course}</option>
+                        ))}
+                      </select>
+                      <label>
+                        <input type="checkbox" checked={filter.dueThisWeek} onChange={e => setFilter(f => ({ ...f, dueThisWeek: e.target.checked }))} />
+                        Due This Week
+                      </label>
+                      <label>
+                        <input type="checkbox" checked={filter.incompleteOnly} onChange={e => setFilter(f => ({ ...f, incompleteOnly: e.target.checked }))} />
+                        Incomplete Only
+                      </label>
+                      <label htmlFor="sort-by">Sort By</label>
+                      <select id="sort-by" value={sortBy} onChange={e => setSortBy(e.target.value)}>
+                        <option value="dueDateTime">Sort by Due Date</option>
+                        <option value="priority">Sort by Priority</option>
+                        <option value="course">Sort by Course</option>
+                      </select>
+                    </div>
+                    <AllAssignments
+                      assignments={filtered}
+                      onEdit={handleEdit}
+                      onDelete={handleDelete}
+                      onComplete={handleComplete}
+                    />
+                  </section>
+                } />
+                <Route path="/calendar" element={<Calendar assignments={assignments} />} />
+                <Route path="/course/:course" element={<CoursePage assignments={assignments} />} />
+              </>
+            </Routes>
+          </>
+        </main>
       </div>
-
-      <ul className="assignment-list">
-        {filtered.length === 0 ? (
-          <li>No assignments found.</li>
-        ) : (
-          filtered.map((a, i) => (
-            <li key={i} className={`assignment-item${a.completed ? ' completed' : ''}`}>
-              <span>
-                <strong>{a.title}</strong> <span className="course">({a.course})</span><br />
-                Due: {new Date(a.dueDateTime).toLocaleString()}<br />
-                Priority: <span className={`priority ${a.priority.toLowerCase()}`}>{a.priority}</span>
-              </span>
-              <div className="actions">
-                <button onClick={() => handleEdit(assignments.indexOf(a))}>Edit</button>
-                <button onClick={() => handleDelete(assignments.indexOf(a))}>Delete</button>
-                <button onClick={() => handleComplete(assignments.indexOf(a))}>
-                  {a.completed ? '✔️ Completed' : '⏳ Mark Complete'}
-                </button>
-              </div>
-            </li>
-          ))
-        )}
-      </ul>
-    </div>
+    </Router>
   );
+// ...existing code...
+}
+
+
+function CoursePage({ assignments }) {
+  const { course } = useParams();
+  return <Course course={course} assignments={assignments} />;
 }
 
 export default App;
